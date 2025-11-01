@@ -1,3 +1,5 @@
+import sys
+import pandas as pd
 from matplotlib import scale as mscale
 from matplotlib import transforms as mtransforms
 from matplotlib.ticker import Formatter, FixedLocator, MultipleLocator
@@ -54,3 +56,22 @@ class AutoVivification(dict):
         except KeyError:
             value = self[item] = type(self)()
             return value
+
+
+def read_text(file_name, col_name=[]):
+    ''' Read one column from text file '''
+
+    try:
+        if col_name:
+            df_gauge = pd.read_csv(file_name, usecols=[col_name], header=0)
+            var = df_gauge[col_name].values.tolist()
+        else:
+            df_gauge = pd.read_csv(file_name, header=None)
+            var = df_gauge.values.tolist()
+    except (IOError):
+        print("Cannot open %s"%File_name)
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+        raise
+
+    return var
